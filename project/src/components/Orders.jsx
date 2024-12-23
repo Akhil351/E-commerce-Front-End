@@ -51,7 +51,7 @@ function Orders() {
               <div className="flex justify-between items-center mb-4">
                 <div>
                   <p className="text-sm text-gray-600">
-                    Order #{order.orderId}
+                    Order {order.orderId}
                   </p>
                   <p className="text-sm text-gray-600">
                     Placed on {new Date(order.orderDate).toLocaleDateString()}

@@ -6,7 +6,7 @@ import Products from './components/Products';
 import Cart from './components/Cart';
 import Orders from './components/Orders';
 import { UserProfileProvider } from './context/UserContext';  
-
+import UserProfile from './components/UseProfile';
 function App() {
   return (
     <UserProfileProvider> 
@@ -20,6 +20,7 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/orders" element={<Orders />} />
+              <Route path="/profile" element={<UserProfile />} />
             </Routes>
           </main>
         </div>

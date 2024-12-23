@@ -2,41 +2,50 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { addToCartApi, productsApi } from "../service/BackEnd";
 import UserProfileContext from "../context/UserContext";
-
+import { useNavigate } from "react-router-dom";
 function Products() {
   const [products, setProducts] = useState([]);
   const { token } = UserProfileContext();
+  const navigator = useNavigate();
   const requestBody = {
     searchKey: "",
     pageNo: 0,
     pageSize: 100,
   };
 
-  const addToCart = async(product) => {
-     try{
-         console.log(product.id,token)
-         await addToCartApi(1,product.id,token);
-         toast.success("product added to cart")
-     }
-     catch(error){
-      console.error(error)
-      toast.error("An unexpected error occurred while adding product into the cart");
-     }
+  const addToCart = async (product) => {
+    try {
+      console.log(product.id, token);
+      await addToCartApi(1, product.id, token);
+      toast.success("product added to cart");
+    } catch (error) {
+      console.error(error.response);
+      const errorCode = error?.response?.data?.error;
+      if (errorCode === "Forbidden") {
+        toast.error("Sign in required");
+        navigator("/login")
+      }
+      else{
+        toast.error(
+          "An unexpected error occurred while adding product into the cart"
+        );
+      }
+    }
   };
 
   useEffect(() => {
     async function loadProducts() {
       try {
         const fetchedProducts = await productsApi(requestBody);
-        console.log(fetchedProducts.data)
-        setProducts(fetchedProducts.data); 
+        console.log(fetchedProducts.data);
+        setProducts(fetchedProducts.data);
       } catch (error) {
         console.error("Error fetching products:", error);
         toast.error("An unexpected error occurred while loading products");
       }
     }
-     loadProducts();
-  }, []); 
+    loadProducts();
+  }, []);
 
   return (
     <div>
